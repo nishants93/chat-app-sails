@@ -19,6 +19,9 @@ var ajaxBuilder = function(method, url, data) {
   });
 }
 $(function(){
+  $(document).ajaxError(function(res){
+    $('.msgBox').html("<span class='failure'>Something has gone wrong, please check your inputs.</span>");
+  });
   $('.btnRegister').click(function(){
     var userName = $('.tbNameRegister').val().trim(),
         email = $('.tbEmailRegister').val().trim(),
@@ -35,8 +38,6 @@ $(function(){
       else{
         $('.msgBox').html("<span class='failure'>Something has gone wrong, please check your inputs.</span>");
       }
-    }).error(function(res){
-        $('.msgBox').html("<span class='failure'>Something has gone wrong, please check your inputs.</span>");
     });
 
   });
