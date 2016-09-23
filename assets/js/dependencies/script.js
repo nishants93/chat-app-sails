@@ -28,7 +28,7 @@ $(function(){
         password = $('.tbPasswordRegister').val().trim();
     if(userName == "" || email == "" || password == "" || !validateEmail(email))
       return;
-    ajaxBuilder('post', 'http://localhost:1337/user/create', {'name' : userName, 'email' : email, 'encryptedPassword' : password}).done(function(res){
+    ajaxBuilder('post', window.CA.appUrl + '/user/create', {'name' : userName, 'email' : email, 'encryptedPassword' : password}).done(function(res){
       if(res['name'] != "Error"){
         $('.tbNameRegister').val("");
         $('.tbEmailRegister').val("");

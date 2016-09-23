@@ -48,6 +48,14 @@ module.exports.routes = {
 
   'GET /user/register': {
     view : 'user/register'
-  }
+  },
+  'GET /user/login': {
+    view: 'user/login'
+  },
+  'POST /user/login': 'UserController.login',
+  'GET /user/home' : {
+    view : 'user/home'
+  },
+  'GET /user/friends' : 'UserController.getFriends'
 
 };
