@@ -56,6 +56,6 @@ module.exports.routes = {
   'GET /user/home' : {
     view : 'user/home'
   },
-  'GET /user/friends' : 'UserController.getFriends'
+  'POST /user/friends' : 'UserController.getFriends'
 
 };

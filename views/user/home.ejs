@@ -16,12 +16,13 @@
         </div>
         <br>
         <div class='col-lg-12 chat-text-box-wrapper'>
-          <input type='text' class='chat-text-box form-control' placeholder='Type messages here'/>
+          <input type='text' class='chat-text-box form-control' data-recipient-id='2' placeholder='Type messages here'/>
         </div>
       </div>
     </div>
-    <div class='col-lg-4'>
-
+    <div class='col-lg-4 friends-box'>
     </div>
   </div>
 </div>
+<input type='hidden' name='csrf' class='csrf-token-home' value='<%= _csrf %>'/>
+<input type='hidden' class='home-page'/>

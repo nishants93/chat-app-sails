@@ -10,15 +10,56 @@ var validateEmail = function(emailVal) {
   if(filter.test(emailVal))
     return true;
   return false;
-}
+};
 var ajaxBuilder = function(method, url, data) {
   return $.ajax({
     method : method,
     url : url,
     data : data
   });
-}
+};
+var loadFriends = function(){
+  $(function(){
+    $.ajax({
+      'url' : 'http://localhost:1337/user/friends',
+      'method' : 'post',
+      'data' : {'_csrf' : $('.csrf-token-home').val()}
+    }).done(function(res){
+      if(res.status === 1) {
+        var friends = JSON.parse(res.content);
+        var htmlToAppend = "";
+        for(var i=0 ; i<friends.length; i++)
+          htmlToAppend += "<div class='row'><div class='col-lg-12'><div class='friend' friend-id='" + friends[i]['userId'] + "'>" + friends[i]['name'] + "</div></div></div>"
+        $('.friends-box').html(htmlToAppend);
+      }
+      else{
+        //something gone wrong
+      }
+    });
+  });
+};
+
 $(function(){
+  if($('.home-page').length > 0) {
+    io.socket.get('/user/registerSocket', function(body, res){
+      console.log(res);
+    });
+    loadFriends();
+    $(document).keypress(function(e) {
+    if(e.which == 13) {
+        var message = $('.chat-text-box').val().trim(),
+            recipientId = $('.chat-text-box').attr('data-recipient-id').trim();
+        if(message == "" || recipientId == "")
+          return;
+        io.socket.get('/user/sendMessage', {recipientId : recipientId, message : message}, function(resData, jwres){
+          console.log(resData);
+        });
+    }
+});
+io.socket.on('foo', function(data){
+  console.log(data);
+});
+  }
   $(document).ajaxError(function(res){
     $('.msgBox').html("<span class='failure'>Something has gone wrong, please check your inputs.</span>");
   });
