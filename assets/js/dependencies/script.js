@@ -220,8 +220,8 @@ $(function(){
             return;
           message = $('.username').val().trim().capitalize() + " : " + message;
           io.socket.get('/user/sendMessage', {recipientId : recipientId, message : message}, function(resData, jwres){
-            $('.chat-box').append('<div class="chat-message">' + message + '</div>');
           });
+          $('.chat-box').append('<div class="chat-message">' + message + '</div>');
       }
     });
     io.socket.on('message', function(data){
