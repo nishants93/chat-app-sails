@@ -212,7 +212,7 @@ $(function(){
       console.log(res);
     });
     loadFriends();
-    $('chat-text-box').keypress(function(e) {
+    $('.chat-text-box').keypress(function(e) {
       if(e.which == 13) {
           var message = $('.chat-text-box').val().trim(),
               recipientId = $('.chat-text-box').attr('data-recipient-id').trim();

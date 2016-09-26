@@ -98,6 +98,7 @@ module.exports = {
 	},
 
 	sendMessage : function(req, res) {
+		console.log('asd');
 		Message.create({'reciever_id' : req.body.recipientId, 'sender_id' : req.session.userId, 'content' : req.body.message}, function(error, res){
 			if(error) {
 				console.log(error);
