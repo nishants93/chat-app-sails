@@ -36,7 +36,7 @@ var loadFriends = function(){
         var friends = JSON.parse(res.content);
         var htmlToAppend = "";
         for(var i=0 ; i<friends.length; i++)
-          htmlToAppend += "<div class='row'><div class='col-lg-12'><div class='friend' friend-id='" + friends[i]['userId'] + "'>" + friends[i]['name'] + "</div></div></div>"
+          htmlToAppend += "<div class='row friend-wrapper'><div class='col-lg-12'><div class='friend' friend-id='" + friends[i]['userId'] + "'>" + friends[i]['name'] + "</div></div></div>"
         $('.friends-box').empty();
         $('.friends-box').html(htmlToAppend);
         attachFriendsHandler();
@@ -54,6 +54,7 @@ var attachFriendsHandler = function(){
     $(this).addClass('active-friend');
     var recipientId = $(this).attr('friend-id');
     $('.chat-text-box').attr('data-recipient-id', recipientId);
+    fetchMessages();
   });
 };
 
@@ -128,58 +129,55 @@ var searchFriendByEmail = function(emailId) {
                     "<div class='row search-result' data-id='" + res.id + "'>\
                       <div class='col-lg-8 search-result-name'>" + res.name +
                       "</div>\
-                      <div class='col-lg-2 search-result-friend-request'>\
-                        Not Friends!\
-                        <input type='button' class='btn btn-success friend-request-button action-button' value='Send Friend Request'/>\
+                      <div class='col-lg-2 search-result-friend-request search-result-button-wrapper'>\
+                        <input type='button' class='btn friend-request-button action-button' value='Send Friend Request'/>\
                       </div>\
-                      <div class='col-lg-2 search-result-block'>\
-                        <input type='button' value='Block' class='btn btn-danger block-button action-button'>\
+                      <div class='col-lg-2 search-result-block search-result-button-wrapper'>\
+                        <input type='button' value='Block' class='btn block-button action-button'>\
                       </div>");
                   break;
         case 1 : $('.search-results-box').html(
                     "<div class='row search-result' data-id='" + res.id + "'>\
-                      <div class='col-lg-8 search-result-name'>" + res.name +
+                      <div class='col-lg-10 search-result-name'>" + res.name +
                       "</div>\
-                      <div class='col-lg-2 search-result-friend-request'>\
-                        Not Friends!\
-                      </div>\
-                      <div class='col-lg-2 search-result-block'>\
-                        <input type='button' value='Unblock' class='btn btn-danger unblock-button action-button'>\
+                      <div class='col-lg-2 search-result-block search-result-button-wrapper'>\
+                        <input type='button' value='Unblock' class='btn unblock-button action-button'>\
                       </div>");
                   break;
         case 2 : $('.search-results-box').html(
                     "<div class='row search-result' data-id='" + res.id + "'>\
                       <div class='col-lg-8 search-result-name'>" + res.name +
                       "</div>\
-                      <div class='col-lg-2 search-result-friend-request'>\
-                        <input type='button' value='Cancel Request' class='btn btn-info cancel-request-button action-button'>\
+                      <div class='col-lg-2 search-result-friend-request search-result-button-wrapper'>\
+                        <input type='button' value='Cancel Request' class='btn cancel-request-button action-button'>\
                       </div>\
-                      <div class='col-lg-2 search-result-block'>\
-                        <input type='button' value='Block' class='btn btn-danger block-button action-button'>\
+                      <div class='col-lg-2 search-result-block search-result-button-wrapper'>\
+                        <input type='button' value='Block' class='btn block-button action-button'>\
                       </div>");
                   break;
         case 3 : $('.search-results-box').html(
                     "<div class='row search-result' data-id='" + res.id + "'>\
-                      <div class='col-lg-8 search-result-name'>" + res.name +
+                      <div class='col-lg-6 search-result-name'>" + res.name +
                       "</div>\
-                      <div class='col-lg-2 search-result-friend-request'>\
-                        <input type='button' value='Accept Request' class='btn btn-success accept-request-button action-button'>\
-                        <input type='button' value='Decline Request' class='btn btn-primary cancel-request-button action-button'>\
+                      <div class='col-lg-2 search-result-friend-request-accept search-result-button-wrapper'>\
+                        <input type='button' value='Accept Request' class='btn accept-request-button action-button'>\
                       </div>\
-                      <div class='col-lg-2 search-result-block'>\
-                        <input type='button' value='Block' class='btn btn-danger block-button action-button'>\
+                      <div class='col-lg-2 search-result-friend-request-decline search-result-button-wrapper'>\
+                        <input type='button' value='Decline Request' class='btn cancel-request-button action-button'>\
+                      </div>\
+                      <div class='col-lg-2 search-result-block search-result-button-wrapper'>\
+                        <input type='button' value='Block' class='btn block-button action-button'>\
                       </div>");
                   break;
         case 4 : $('.search-results-box').html(
                     "<div class='row search-result' data-id='" + res.id + "'>\
                       <div class='col-lg-8 search-result-name'>" + res.name +
                       "</div>\
-                      <div class='col-lg-2 search-result-friend-request'>\
-                        Already Friends!\
-                        <input type='button' class='btn btn-success unfriend-button action-button' value='Unfriend'/>\
+                      <div class='col-lg-2 search-result-friend-request search-result-button-wrapper'>\
+                        <input type='button' class='btn unfriend-button action-button' value='Unfriend'/>\
                       </div>\
-                      <div class='col-lg-2 search-result-block'>\
-                        <input type='button' value='Block' class='btn btn-danger block-button action-button'>\
+                      <div class='col-lg-2 search-result-block search-result-button-wrapper'>\
+                        <input type='button' value='Block' class='btn block-button action-button'>\
                       </div>");
                   break;
 
@@ -188,6 +186,25 @@ var searchFriendByEmail = function(emailId) {
     }
   });
 };
+
+var fetchMessages = function(){
+  if($('.chat-text-box').attr('data-recipient-id') === undefined) {
+    return;
+  }
+  var nextUserId = $('.chat-text-box').attr('data-recipient-id').trim();
+  $('.chat-box').empty();
+  $.ajax({
+    'url' : window.CA.appUrl + "/user/fetchMessages",
+    'type' : 'post',
+    'data' : {'_csrf' : $('.csrf-token-home').val(), 'nextUserId' : nextUserId}
+  }).done(function(res){
+    var chatHtmlString = "";
+    for(var i=0; i<res.length; i++) {
+      chatHtmlString += '<div class="chat-message">' + res[i]['content'] + '</div>';
+    }
+    $('.chat-box').html(chatHtmlString);
+  });
+}
 
 var searchFriend = function(searchBox){
   var emailId = $(searchBox).val().trim();
@@ -214,6 +231,9 @@ $(function(){
     loadFriends();
     $('.chat-text-box').keypress(function(e) {
       if(e.which == 13) {
+          if($('.chat-text-box').attr('data-recipient-id') === undefined) {
+            return;
+          }
           var message = $('.chat-text-box').val().trim(),
               recipientId = $('.chat-text-box').attr('data-recipient-id').trim();
           if(message == "" || recipientId == "")
@@ -222,6 +242,7 @@ $(function(){
           io.socket.get('/user/sendMessage', {recipientId : recipientId, message : message}, function(resData, jwres){
           });
           $('.chat-box').append('<div class="chat-message">' + message + '</div>');
+          $('.chat-text-box').val("");
       }
     });
     io.socket.on('message', function(data){
