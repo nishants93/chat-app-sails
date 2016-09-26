@@ -45,17 +45,10 @@ module.exports.routes = {
   * for configuration options and examples.                                  *
   *                                                                          *
   ***************************************************************************/
-
-  'GET /user/register': {
-    view : 'user/register'
-  },
-  'GET /user/login': {
-    view: 'user/login'
-  },
+  'GET /user/login': 'UserController.getLoginView',
   'POST /user/login': 'UserController.login',
-  'GET /user/home' : {
-    view : 'user/home'
-  },
-  'POST /user/friends' : 'UserController.getFriends'
+  'GET /user/home' : 'UserController.getHomeView',
+  'POST /user/friends' : 'UserController.getFriends',
+  'POST /search' : 'UserController.search'
 
 };
