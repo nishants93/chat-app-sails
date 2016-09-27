@@ -6,13 +6,18 @@ a [Sails](http://sailsjs.org) application
 
 -> First of all install all dependencies,
 	
-	* Install npm
+	* Install npm (for Debian linux, apt-get install npm)
 
-	* Install Nodejs
+	* Install Nodejs (for Debian linux)
 
-	* Install Sailsjs
+		* curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
+		* sudo apt-get install -y nodejs
 
-	* Run npm install in the project directory
+	* Install Sailsjs (npm install sails -g)
+
+	* Run npm install in the project directory (npm install)
+
+	* Run "npm install sails-mysql --save" if sails mysql is not installed during "npm install"
 
 -> Then change the database configurations in config/connections.js
 
